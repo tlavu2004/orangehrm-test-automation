@@ -1,16 +1,20 @@
-# OrangeHRM Test Automation Framework
+# OrangeHRM Test Automation
+
+Automated test suite for OrangeHRM Employee Self-Service (My Info) and Leave Management modules using Selenium WebDriver, TestNG, and Maven.
+
+**Repository:** https://github.com/tlavu2004/orangehrm-test-automation
 
 ## Overview
-This is a comprehensive Selenium automation framework for testing the OrangeHRM application. The framework implements Page Object Model (POM) design pattern and supports data-driven testing using TestNG.
+A comprehensive automation framework implementing Page Object Model (POM) with data-driven testing capabilities. The framework is designed for stability across multiple browsers and supports execution on Selenium Grid (Docker).
 
 ## Technology Stack
 - **Language**: Java 17
-- **Build Tool**: Maven
+- **Build Tool**: Maven 3.6+
 - **Test Framework**: TestNG 7.9.0
-- **Automation Tool**: Selenium WebDriver 4.17.0
+- **Automation**: Selenium WebDriver 4.17.0
 - **Driver Management**: WebDriverManager 5.6.3
-- **CSV Parser**: OpenCSV 5.9
-- **Logging**: Log4j 2.22.1
+- **Data Source**: CSV (OpenCSV 5.9)
+- **Execution**: Local WebDriver or RemoteWebDriver (Selenium Grid)
 
 ## Project Structure
 ```
@@ -42,19 +46,28 @@ orangehrm-test-automation/
 └── README.md                                   # This file
 ```
 
-## Features
+## Key Features
 
-### 1. **Multi-Browser Support**
-The framework supports testing across 3 browsers:
-- Google Chrome
-- Mozilla Firefox
-- Microsoft Edge
+### 1. **Cross-Browser Testing (3+ Browsers)**
+Supports testing across multiple browsers with enhanced stability:
+- **Chrome** (default)
+- **Firefox** (with ElementClickIntercepted handling)
+- **Microsoft Edge**
 
-Configure browser in `testng.xml` or pass as parameter:
+All browsers tested and verified on Selenium Grid.
+
+**Local execution:**
 ```bash
 mvn test -Dbrowser=chrome
 mvn test -Dbrowser=firefox
 mvn test -Dbrowser=edge
+``` with Robustness**
+- **BasePage**: Enhanced with retry logic, loader/overlay waits, and multiple click strategies (regular → Actions → JS fallback)
+- **LoginPage**: Handles authentication with modern OrangeHRM UI
+- **MyInfoPage**: Manages personal details with 12 field types and custom dropdown handling (UC01 - 39 test cases)
+- **LeavePage**: Manages leave applications with decision table testingue -Dheadless=true
+mvn clean test -Dbrowser=firefox -Dremote=true -Dheadless=true
+mvn clean test -Dbrowser=edge -Dremote=true -Dheadless=true
 ```
 
 ### 2. **Page Object Model (POM)**
@@ -92,34 +105,38 @@ Tests read data from `testcases_all_ess_detailed.csv` using TestNG `@DataProvide
 ### Prerequisites
 1. **Java JDK 17+** installed
 2. **Maven 3.6+** installed
-3. **Browsers** installed (Chrome, Firefox, Edge)
+3. **Docker** (for Selenium Grid and OrangeHRM containers)
+4. **Git** (for cloning repository)
 
 ### Installation
-1. Clone or extract the project
-2. Navigate to project directory:
+1. Clone the repository:
    ```bash
+   git clone https://github.com/tlavu2004/orangehrm-test-automation.git
    cd orangehrm-test-automation
    ```
 
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    mvn clean install
    ```
 
-### Configuration
-
-#### 1. Update Test Credentials
-Edit the following files and replace placeholders with actual credentials:
-- `src/test/java/com/orangehrm/tests/MyInfoTest.java`
-- `src/test/java/com/orangehrm/tests/LeaveTest.java`
-
-```java
-private static final String EMPLOYEE_USERNAME = "YOUR_USERNAME";
-private static final String EMPLOYEE_PASSWORD = "YOUR_PASSWORD";
+3. Start Selenium Grid and OrangeHRM (Docker):
+   ``Default Test Credentials
+The framework uses default OrangeHRM credentials (can be overridden):
+```bash
+mvn test -Dtest.username=yourUsername -Dtest.password=yourPassword
 ```
 
-#### 2. Update Locators
-Replace placeholder locators in page objects with actual locators from the application:
+Default credentials (Docker setup):
+- Username: `orangehrm`
+- Password: `OrangeHRM@123`
+
+#### Base URL Configuration
+Default: `http://localhost:8080` (Docker OrangeHRM container)
+
+To override, edit `src/test/java/com/orangehrm/base/BaseTest.java`:
+```java
+protected String baseUrl = "https://your-orangehrm-instanceal locators from the application:
 - `src/main/java/com/orangehrm/pages/LoginPage.java`
 - `src/main/java/com/orangehrm/pages/MyInfoPage.java`
 - `src/main/java/com/orangehrm/pages/LeavePage.java`
@@ -137,33 +154,42 @@ private final By usernameField = By.name("username");
 Edit `src/test/java/com/orangehrm/base/BaseTest.java`:
 ```java
 protected String baseUrl = "https://your-orangehrm-url.com/";
-```
-
-## Running Tests
-
-### Option 1: Run All Tests
+```Quick Start (Recommended)
+Run all 49 tests on Chrome via Selenium Grid:
 ```bash
-mvn test
+mvn clean test -Dbrowser=chrome -Dremote=true -Dheadless=true
 ```
 
-### Option 2: Run Specific Test Suite
+### Run Specific Browser
 ```bash
-mvn test -DsuiteXmlFile=testng.xml
+# Chrome
+mvn clean test -Dbrowser=chrome -Dremote=true -Dheadless=true
+
+# Firefox
+mvn clean test -Dbrowser=firefox -Dremote=true -Dheadless=true
+
+# Edge
+mvn clean test -Dbrowser=edge -Dremote=true -Dheadless=true
 ```
 
-### Option 3: Run Specific Browser
+### Run Specific Test Suite
+```bash
+# My Info tests only (39 tests)
+mvn test -Dtest=MyInfoTest -Dbrowser=chrome -Dremote=true
+
+# Leave tests only (10 tests)
+mvn test -Dtest=LeaveTest -Dbrowser=chrome -Dremote=true
+```
+
+### Local Execution (Without Docker)
 ```bash
 mvn test -Dbrowser=chrome
-mvn test -Dbrowser=firefox
-mvn test -Dbrowser=edge
 ```
 
-### Option 4: Run Specific Test Class
-```bash
-mvn test -Dtest=MyInfoTest
-mvn test -Dtest=LeaveTest
-```
-
+### Run from IDE
+1. Import project as Maven project in IntelliJ/Eclipse
+2. Right-click `testng.xml` → Run As → TestNG Suite
+3. Or right-click
 ### Option 5: Run from IDE
 1. Import project as Maven project
 2. Right-click `testng.xml` → Run As → TestNG Suite
@@ -226,26 +252,44 @@ private final By loginButton = By.xpath("//button[@type='submit']");
 **Solution**: WebDriverManager handles this automatically. Ensure internet connection is available on first run.
 
 ### Issue 2: Element not found
-**Solution**: Update locators with actual values from the application DOM.
+**Solution**:Docker containers not starting
+**Solution**: 
+```bash
+# Check Docker is running
+docker ps
 
-### Issue 3: CSV file not found
-**Solution**: Ensure `testcases_all_ess_detailed.csv` is in the project root directory.
+# Restart containers
+docker compose -f docker-compose.selenium.yml down
+docker compose -f docker-compose.selenium.yml up -d
 
-### Issue 4: Test timeout
-**Solution**: Increase timeout in `BasePage.java`:
-```java
-private static final int DEFAULT_TIMEOUT = 20; // Increase from 10 to 20
+# Check logs
+docker compose -f docker-compose.selenium.yml logs -f
 ```
 
-### Issue 5: Browser not opening
+### Issue 2: Tests fail with "Element not clickable" (Firefox)
+**Solution**: Framework already handles this with:
+- Loader/overlay waits (`waitForLoaderToDisappear`, `waitForOverlaysToDisappear`)
+- Retry logic with Actions and JS click fallbacks
+- If still occurs, increase wait in `BasePage.java` (currently 5s)
+
+### Issue 3: Connection refused to Selenium Grid
 **Solution**: 
-- Check browser is installed
-- Update WebDriverManager version in `pom.xml`
-- Clear Maven cache: `mvn clean`
+```bash
+# Verify Grid is accessible
+curl http://localhost:4444/status
 
-## Reports
+# Check if OrangeHRM is running
+curl http://localhost:8080
+```
 
-### TestNG HTML Reports
+### Issue 4: CSV file not found
+**Solution**: Ensure `testcases_all_ess_detailed.csv` is in project root directory.
+
+### Issue 5: Tests pass locally but fail on Grid
+**Solution**: 
+- Ensure OrangeHRM container is in same Docker network as Grid
+- Check `docker-compose.selenium.yml` has `selenium-net` network defined
+- Verify BaseTest uses correct remote URL based on `-Dremote=true
 After test execution, reports are generated at:
 ```
 target/surefire-reports/index.html
@@ -282,22 +326,63 @@ Open in browser to view:
 ### Adding Test Listeners
 Create custom listener for:
 - Screenshots on failure
-- Custom logging
-- Reporting integration
+- CImplementation Highlights
 
-Example:
-```java
-public class TestListener extends TestListenerAdapter {
-    @Override
-    public void onTestFailure(ITestResult result) {
-        // Take screenshot
-        // Log failure
-    }
-}
-```
+### Cross-Browser Stability
+- **Firefox fix**: Enhanced `BasePage.clickElement()` with overlay detection and retry strategies
+- **Edge compatibility**: Tested and verified on Selenium Grid standalone-edge image
+- **Chrome baseline**: Primary browser for development and debugging
 
-## Known Limitations
+### Modern OrangeHRM UI Support
+- ATest Results
 
+**Current Status:** ✅ 49/49 tests passing (100%)
+- UC01 (My Info): 39/39 ✅
+- UC02 (Leave Management): 10/10 ✅
+
+**Browsers Verified:**
+- Chrome standalone ✅
+- Firefox standalone ✅
+- Edge standalone ✅
+
+**Execution Time:** ~9-10 minutes (full suite on Grid)
+
+## Documentation
+
+- **Detailed Report**: [docs/Automation_Test_Report.md](docs/Automation_Test_Report.md)
+- **Docker Compose**: [docker-compose.selenium.yml](docker-compose.selenium.yml)
+- **Test Data**: [testcases_all_ess_detailed.csv](testcases_all_ess_detailed.csv)
+
+## Resources
+
+- **Repository**: https://github.com/tlavu2004/orangehrm-test-automation
+- **TestNG Documentation**: https://testng.org/
+- **Selenium Documentation**: https://www.selenium.dev/
+- **OrangeHRM**: https://www.orangehrm.com/
+
+## Version History
+
+**Version 1.1** (2026-01-03)
+- Enhanced cross-browser stability (Firefox ElementClickIntercepted fix)
+- Improved BasePage with loader/overlay detection
+- Added retry logic with Actions and JS fallback
+- Increased default timeout to 5s for reliability
+- All 49 tests passing on Chrome, Firefox, Edge
+
+**Version 1.0** (Initial)
+- Page Object Model implementation
+- Multi-browser support (Chrome, Firefox, Edge)
+- Data-driven testing with CSV
+- 49 test cases implemented
+
+## License
+
+This framework is created for educational purposes as part of Software Testing coursework.
+
+---
+
+**Author:** Trương Lê Anh Vũ (22120443)  
+**Repository:** https://github.com/tlavu2004/orangehrm-test-automation
 1. **Placeholder Locators**: All locators need to be replaced with actual values
 2. **Test Credentials**: Must be configured before running
 3. **CSV Path**: Hardcoded to root directory
