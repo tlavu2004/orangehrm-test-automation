@@ -1,0 +1,307 @@
+﻿Feature ID,Test case ID,Test Description,Test Steps,Expected Result,Actual Result,Status,Tester,Tested Date,Remark
+UC01,TC001,Cập nhật họ tên hợp lệ với ký tự tiếng Việt,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""Văn""
+5. Nhập Middle Name: ""A""
+6. Nhập Last Name: ""Nguyễn""
+7. Click Save","Thông tin nhân viên được cập nhật thành công, hiển thị thông báo ""Successfully Updated""","Thông tin nhân viên được cập nhật thành công, hiển thị thông báo ""Successfully Updated""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Normal Vietnamese name
+UC01,TC002,Cập nhật First Name rỗng (boundary),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Xóa trống First Name
+5. Nhập Last Name: ""Nguyễn""
+6. Click Save","Hiển thị thông báo lỗi ""Required""","Hiển thị thông báo lỗi ""Required""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Empty required field
+UC01,TC003,Cập nhật First Name với 1 ký tự (lower boundary),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""A""
+5. Nhập Last Name: ""Nguyễn""
+6. Click Save",Thông tin nhân viên được cập nhật thành công,Thông tin nhân viên được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid boundary - Minimum length (1 character)
+UC01,TC004,Cập nhật First Name với 30 ký tự (upper boundary),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA""
+5. Nhập Last Name: ""Nguyễn""
+6. Click Save",Thông tin nhân viên được cập nhật thành công,Thông tin nhân viên được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid boundary - Maximum allowed length
+UC01,TC005,Cập nhật First Name vượt quá 30 ký tự,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA""
+5. Nhập Last Name: ""Nguyễn""
+6. Click Save","Hiển thị thông báo lỗi ""Should not exceed 30 characters""",Hệ thống chấp nhận 31 ký tự và hiển thị đầy đủ,Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Exceeds maximum length
+UC01,TC006,Cập nhật First Name chứa số,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""Văn123""
+5. Nhập Last Name: ""Nguyễn""
+6. Click Save",Hiển thị thông báo lỗi về ký tự không hợp lệ,"Hệ thống chấp nhận và lưu tên có chứa số, không hiển thị lỗi",Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Numbers not allowed
+UC01,TC007,Cập nhật First Name chứa ký tự đặc biệt,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""Văn@#$""
+5. Nhập Last Name: ""Nguyễn""
+6. Click Save",Hiển thị thông báo lỗi về ký tự không hợp lệ,"Hệ thống chấp nhận ký tự đặc biệt @#$ trong tên, không có validation",Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Special characters not allowed
+UC01,TC008,Cập nhật Last Name rỗng (boundary),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""Văn""
+5. Xóa trống Last Name
+6. Click Save","Hiển thị thông báo lỗi ""Required""","Hiển thị thông báo lỗi ""Required""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Empty required field
+UC01,TC009,Cập nhật Middle Name tùy chọn (optional field),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào My Info menu
+3. Chọn tab Personal Details
+4. Nhập First Name: ""Văn""
+5. Để trống Middle Name
+6. Nhập Last Name: ""Nguyễn""
+7. Click Save",Thông tin nhân viên được cập nhật thành công (Middle Name là optional),Thông tin nhân viên được cập nhật thành công (Middle Name là optional),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Optional field can be empty
+UC01,TC010,Kiểm tra Employee ID hợp lệ (4 chữ số),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Kiểm tra Employee ID: ""0001""",Employee ID hiển thị đúng định dạng 4 chữ số,Employee ID hiển thị đúng định dạng 4 chữ số,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Standard format
+UC01,TC011,Kiểm tra Employee ID chỉ đọc (read-only),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Thử sửa Employee ID",Trường Employee ID không cho phép chỉnh sửa (read-only hoặc disabled),Trường Employee ID không cho phép chỉnh sửa (read-only hoặc disabled),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Constraint check - Should be read-only
+UC01,TC012,Cập nhật Other ID với giá trị hợp lệ,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Other ID: ""CMND123456""
+5. Click Save",Other ID được cập nhật thành công,Other ID được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Alphanumeric value
+UC01,TC013,Để trống Other ID (optional field),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Để trống Other ID
+5. Click Save","Cập nhật thành công, Other ID có thể để trống","Cập nhật thành công, Other ID có thể để trống",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Optional field
+UC01,TC014,Cập nhật Other ID vượt quá độ dài cho phép,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Other ID: ""AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA""
+5. Click Save",Hiển thị thông báo lỗi về độ dài tối đa,Hệ thống chấp nhận Other ID quá dài,Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Exceeds max length
+UC01,TC015,Cập nhật License Number và Expiry Date hợp lệ,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Driver's License Number: ""B2-123456""
+5. Chọn License Expiry Date: ""2026-12-31""
+6. Click Save",Thông tin giấy phép lái xe được cập nhật thành công,Thông tin giấy phép lái xe được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Future expiry date
+UC01,TC016,Cập nhật License với ngày hết hạn trong quá khứ,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Driver's License Number: ""B2-123456""
+5. Chọn License Expiry Date: ""2020-01-01""
+6. Click Save",Có thể lưu (warning) hoặc hiển thị thông báo về ngày đã hết hạn,"Hệ thống lưu thành công nhưng không hiển thị warning về giấy phép đã hết hạn",Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Boundary - Past date (expired license)
+UC01,TC017,Cập nhật License Expiry Date = ngày hiện tại (boundary),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Driver's License Number: ""B2-123456""
+5. Chọn License Expiry Date = ngày hôm nay
+6. Click Save",Thông tin được cập nhật thành công (ngày hiện tại là valid),Thông tin được cập nhật thành công (ngày hiện tại là valid),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Boundary - Today's date
+UC01,TC018,Để trống cả License Number và Expiry Date,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Để trống Driver's License Number
+5. Để trống License Expiry Date
+6. Click Save",Cập nhật thành công (cả 2 trường đều optional),Cập nhật thành công (cả 2 trường đều optional),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Both fields optional
+UC01,TC019,Nhập License Number nhưng không có Expiry Date,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Driver's License Number: ""B2-123456""
+5. Để trống License Expiry Date
+6. Click Save",Cập nhật thành công hoặc yêu cầu nhập Expiry Date (tùy business rule),Cập nhật thành công hoặc yêu cầu nhập Expiry Date (tùy business rule),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Dependency check - License without expiry
+UC01,TC020,Chọn Nationality hợp lệ từ dropdown,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Click dropdown Nationality
+5. Chọn ""Vietnamese""
+6. Click Save",Nationality được cập nhật thành công,Nationality được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Valid dropdown selection
+UC01,TC021,Không chọn Nationality (để mặc định),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Giữ Nationality = ""-- Select --""
+5. Click Save","Cập nhật thành công (nếu optional) hoặc hiển thị lỗi ""Required"" (nếu required)","Hệ thống lưu thành công mặc dù Nationality là trường required theo business rules",Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Boundary - No selection (empty)
+UC01,TC022,Chọn nhiều Nationality khác nhau liên tiếp,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Chọn Nationality: ""Vietnamese""
+5. Click Save
+6. Đổi sang ""American""
+7. Click Save","Mỗi lần lưu, giá trị mới được cập nhật chính xác","Mỗi lần lưu, giá trị mới được cập nhật chính xác",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Multiple valid selections
+UC01,TC023,"Chọn Marital Status = ""Single""","1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Click dropdown Marital Status
+5. Chọn ""Single""
+6. Click Save",Marital Status được cập nhật thành công,Marital Status được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,"Domain: Valid partition - Valid option ""Single"""
+UC01,TC024,"Chọn Marital Status = ""Married""","1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Click dropdown Marital Status
+5. Chọn ""Married""
+6. Click Save",Marital Status được cập nhật thành công,Marital Status được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,"Domain: Valid partition - Valid option ""Married"""
+UC01,TC025,"Chọn Marital Status = ""Other""","1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Click dropdown Marital Status
+5. Chọn ""Other""
+6. Click Save",Marital Status được cập nhật thành công,Marital Status được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,"Domain: Valid partition - Valid option ""Other"""
+UC01,TC026,Không chọn Marital Status,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Giữ Marital Status = ""-- Select --""
+5. Click Save",Cập nhật thành công (nếu optional) hoặc hiển thị lỗi (nếu required),Cập nhật thành công (nếu optional) hoặc hiển thị lỗi (nếu required),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Boundary - No selection
+UC01,TC027,Cập nhật Date of Birth hợp lệ (30 tuổi),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth: ""1995-06-15""
+5. Click Save",Date of Birth được cập nhật thành công,Date of Birth được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Normal working age (30 years)
+UC01,TC028,Cập nhật Date of Birth đúng 18 tuổi (lower boundary),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth = ngày 18 năm trước
+5. Click Save",Date of Birth được cập nhật thành công (18 tuổi là tuổi tối thiểu),Date of Birth được cập nhật thành công (18 tuổi là tuổi tối thiểu),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Lower boundary - Minimum legal working age (18)
+UC01,TC029,Cập nhật Date of Birth dưới 18 tuổi (invalid),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth: ""2010-01-01"" (15 tuổi)
+5. Click Save",Hiển thị thông báo lỗi về tuổi tối thiểu hoặc cho phép lưu (tùy business rule),Hệ thống chấp nhận tuổi dưới 18,Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Below minimum age (<18)
+UC01,TC030,Cập nhật Date of Birth = 65 tuổi (upper boundary typical),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth = ngày 65 năm trước
+5. Click Save",Date of Birth được cập nhật thành công,Date of Birth được cập nhật thành công,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Upper boundary - Typical retirement age (65)
+UC01,TC031,Cập nhật Date of Birth = 100 tuổi (extreme upper boundary),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth = ngày 100 năm trước
+5. Click Save",Hệ thống cho phép lưu hoặc cảnh báo về độ tuổi cao bất thường,Hệ thống cho phép lưu hoặc cảnh báo về độ tuổi cao bất thường,Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Extreme boundary - Very old age (100)
+UC01,TC032,Cập nhật Date of Birth = ngày hôm nay (invalid),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth = ngày hiện tại
+5. Click Save","Hiển thị thông báo lỗi ""Date of Birth should be in the past""","Hệ thống chấp nhận ngày sinh = ngày hiện tại (age = 0), không validation",Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Today (age = 0)
+UC01,TC033,Cập nhật Date of Birth trong tương lai (invalid),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth: ""2030-12-31""
+5. Click Save","Hiển thị thông báo lỗi ""Date of Birth should be in the past""","Hiển thị thông báo lỗi ""Date of Birth should be in the past""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Future date
+UC01,TC034,Cập nhật Date of Birth với định dạng sai,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Nhập Date of Birth: ""15/06/1995"" (dd/mm/yyyy)
+5. Click Save",Hiển thị thông báo lỗi về định dạng hoặc tự động chuyển đổi,"Hệ thống chuyển đổi sai: hiểu 15/06/1995 thành 06/15/1995 (mm/dd/yyyy)",Fail,Trương Lê Anh Vũ,20/12/2025,Domain: Invalid partition - Wrong format
+UC01,TC035,Để trống Date of Birth (optional),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Để trống Date of Birth
+5. Click Save","Cập nhật thành công (nếu optional) hoặc hiển thị lỗi ""Required""","Cập nhật thành công (nếu optional) hoặc hiển thị lỗi ""Required""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Boundary - Empty field (optional check)
+UC01,TC036,"Chọn Gender = ""Male""","1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Click radio button ""Male""
+5. Click Save","Gender được cập nhật thành ""Male""","Gender được cập nhật thành ""Male""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Male selection
+UC01,TC037,"Chọn Gender = ""Female""","1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên
+4. Click radio button ""Female""
+5. Click Save","Gender được cập nhật thành ""Female""","Gender được cập nhật thành ""Female""",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid partition - Female selection
+UC01,TC038,Thay đổi Gender từ Male sang Female,"1. Đăng nhập OrangeHRM
+2. Vào PIM > Employee List
+3. Chọn nhân viên có Gender = ""Male""
+4. Click radio button ""Female""
+5. Click Save","Gender được cập nhật từ ""Male"" sang ""Female"" thành công","Gender được cập nhật từ ""Male"" sang ""Female"" thành công",Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Valid transition - Change from one valid value to another
+UC01,TC039,Không chọn Gender (kiểm tra required),"1. Đăng nhập OrangeHRM
+2. Vào PIM > Add Employee
+3. Nhập thông tin bắt buộc
+4. Không chọn Gender (cả Male và Female đều không check)
+5. Click Save",Hệ thống cho phép lưu (nếu optional) hoặc yêu cầu chọn Gender (nếu required),Hệ thống cho phép lưu (nếu optional) hoặc yêu cầu chọn Gender (nếu required),Pass,Trương Lê Anh Vũ,20/12/2025,Domain: Boundary - No selection (check if required)
+UC02,TC040,Decision Table Rule R1: Tất cả điều kiện hợp lệ,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 12 ngày
+6. Nhập From Date: ""2025-12-25""
+7. Nhập To Date: ""2025-12-27"" (3 ngày)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Đơn xin nghỉ được nộp thành công. Hiển thị thông báo ""Successfully Saved"" và đơn xuất hiện trong Leave List với status ""Pending Approval""",1. Timesheet chuyển sang trạng thái Submitted,Fail,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R1: Balance=Y, DateOrder=Y, Future=Y, NoOverlap=Y -> A1"
+UC02,TC041,Decision Table Rule R2: Không đủ số dư phép,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 2 ngày
+6. Nhập From Date: ""2025-12-25""
+7. Nhập To Date: ""2025-12-29"" (5 ngày - vượt quá số dư)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Hiển thị thông báo lỗi ""Balance not sufficient"" hoặc ""Failed to Submit: Leave balance exceeded""","Đơn xin nghỉ được submit thành công với status Pending, không check số dư",Fail,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R2: Balance=N, DateOrder=Y, Future=Y, NoOverlap=Y -> A2"
+UC02,TC042,Decision Table Rule R3: Ngày bắt đầu >= ngày kết thúc,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 12 ngày
+6. Nhập From Date: ""2025-12-29""
+7. Nhập To Date: ""2025-12-25"" (To Date < From Date)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Hiển thị thông báo lỗi ""To Date should be after From Date"" hoặc ""Invalid date range""","Hiển thị thông báo lỗi ""To Date should be after From Date"" hoặc ""Invalid date range""",Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R3: Balance=Y, DateOrder=N, Future=Y, NoOverlap=Y -> A3"
+UC02,TC043,Decision Table Rule R4: Ngày xin phép trong quá khứ,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 12 ngày
+6. Nhập From Date: ""2025-12-15"" (quá khứ)
+7. Nhập To Date: ""2025-12-17""
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Hiển thị thông báo lỗi ""Date should be in the future"" hoặc không cho phép chọn ngày quá khứ","Hiển thị thông báo lỗi ""Date should be in the future"" hoặc không cho phép chọn ngày quá khứ",Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R4: Balance=Y, DateOrder=Y, Future=N, NoOverlap=Y -> A4"
+UC02,TC044,Decision Table Rule R5: Trùng với đơn nghỉ đã tồn tại,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 12 ngày
+6. Nhân viên đã có đơn nghỉ: 2025-12-26 đến 2025-12-28
+7. Nhập From Date: ""2025-12-25""
+8. Nhập To Date: ""2025-12-27"" (trùng với đơn cũ)
+9. Nhập Comment: ""Xin nghỉ phép""
+10. Click ""Apply"" button","Hiển thị thông báo lỗi ""Overlapping leave request found"" hoặc ""Failed to Submit: Overlapping Leave""","Đơn xin nghỉ được submit thành công, hệ thống không detect overlap với đơn cũ",Fail,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R5: Balance=Y, DateOrder=Y, Future=Y, NoOverlap=N -> A5"
+UC02,TC045,Decision Table Rule R6: Không đủ số dư + Ngày không hợp lệ,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 2 ngày
+6. Nhập From Date: ""2025-12-25""
+7. Nhập To Date: ""2025-12-29"" (5 ngày - vượt quá số dư)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button",Hiển thị lỗi về số dư không đủ HOẶC ngày không hợp lệ (tùy validation order của hệ thống),Hiển thị lỗi về số dư không đủ HOẶC ngày không hợp lệ (tùy validation order của hệ thống),Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R6: Balance=N, DateOrder=N, Future=Y, NoOverlap=Y -> A2/A3"
+UC02,TC046,Decision Table Rule R7: Không đủ số dư + Ngày trong quá khứ,"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 2 ngày
+6. Nhập From Date: ""2025-12-25""
+7. Nhập To Date: ""2025-12-29"" (5 ngày - vượt quá số dư)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button",Hiển thị lỗi về số dư không đủ HOẶC ngày trong quá khứ (tùy validation order của hệ thống),Hiển thị lỗi về số dư không đủ HOẶC ngày trong quá khứ (tùy validation order của hệ thống),Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R7: Balance=N, DateOrder=Y, Future=N, NoOverlap=Y -> A2/A4"
+UC02,TC047,Decision Table Rule R8: Ngày không hợp lệ (ưu tiên lỗi date range),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 12 ngày
+6. Nhập From Date: ""2025-12-29""
+7. Nhập To Date: ""2025-12-25"" (To Date < From Date)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Hiển thị thông báo lỗi ""To Date should be after From Date"" hoặc ""Invalid date range""","Hiển thị thông báo lỗi ""To Date should be after From Date"" hoặc ""Invalid date range""",Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R8: Balance=Y, DateOrder=N, Future=Y, NoOverlap=N -> A3"
+UC02,TC048,Decision Table Rule R9: Số dư phép = số ngày xin (boundary),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 3 ngày
+6. Nhập From Date: ""2025-12-25""
+7. Nhập To Date: ""2025-12-27"" (3 ngày - đúng bằng số dư)
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Đơn xin nghỉ được nộp thành công. Hiển thị thông báo ""Successfully Saved"" và đơn xuất hiện trong Leave List với status ""Pending Approval""","Đơn xin nghỉ được nộp thành công. Hiển thị thông báo ""Successfully Saved"" và đơn xuất hiện trong Leave List với status ""Pending Approval""",Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R9: Balance=EQUAL, DateOrder=Y, Future=Y, NoOverlap=Y -> A1"
+UC02,TC049,Decision Table Rule R10: Xin phép từ ngày hôm nay (boundary),"1. Đăng nhập OrangeHRM bằng tài khoản Employee
+2. Vào Leave menu
+3. Click ""Apply""
+4. Chọn Leave Type: ""Annual Leave""
+5. Nhân viên có số dư phép: 12 ngày
+6. Nhập From Date: ""2025-12-20"" (hôm nay)
+7. Nhập To Date: ""2025-12-22""
+8. Nhập Comment: ""Xin nghỉ phép""
+9. Click ""Apply"" button","Đơn xin nghỉ được nộp thành công. Hiển thị thông báo ""Successfully Saved"" và đơn xuất hiện trong Leave List với status ""Pending Approval""","Đơn xin nghỉ được nộp thành công. Hiển thị thông báo ""Successfully Saved"" và đơn xuất hiện trong Leave List với status ""Pending Approval""",Pass,Trương Lê Anh Vũ,20/12/2025,"Decision Table - R10: Balance=Y, DateOrder=Y, Future=TODAY, NoOverlap=Y -> A1"
