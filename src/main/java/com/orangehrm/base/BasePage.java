@@ -15,7 +15,7 @@ import java.time.Duration;
 public class BasePage {
     protected WebDriver driver;
     protected WebDriverWait wait;
-    private static final int DEFAULT_TIMEOUT = 2; // Reduced to 2s for maximum speed
+    private static final int DEFAULT_TIMEOUT = 5; // Increased to 5s for more stable waits
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -26,24 +26,80 @@ public class BasePage {
      * Wait for element to be clickable and click
      */
     protected void clickElement(By locator) {
-        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        // Scroll vào view trước khi click - use center to avoid header overlay
-        try {
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element);
-            Thread.sleep(300); // Wait for scroll
-            
-            // Try JavaScript click if regular click fails for submit buttons
-            if (locator.toString().contains("submit")) {
+        // Wait for any loaders/overlays to disappear before interacting
+        waitForLoaderToDisappear();
+        waitForOverlaysToDisappear();
+
+        int attempts = 0;
+        while (attempts < 3) {
+            attempts++;
+            try {
+                WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+
+                // Scroll into view
                 try {
-                    ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                    ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                        "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element);
+                    Thread.sleep(250);
+                } catch (Exception ignored) {}
+
+                // Try regular click
+                try {
+                    element.click();
                     return;
-                } catch (Exception e) {
-                    // Fallback to regular click
+                } catch (org.openqa.selenium.ElementClickInterceptedException intercepted) {
+                    // Try Actions click
+                    try {
+                        org.openqa.selenium.interactions.Actions actions = new org.openqa.selenium.interactions.Actions(driver);
+                        actions.moveToElement(element).pause(java.time.Duration.ofMillis(150)).click().perform();
+                        return;
+                    } catch (Exception e) {
+                        // Try JS click as last resort
+                        try {
+                            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                            return;
+                        } catch (Exception jsEx) {
+                            if (attempts >= 3) {
+                                throw intercepted;
+                            }
+                        }
+                    }
                 }
+            } catch (org.openqa.selenium.StaleElementReferenceException | org.openqa.selenium.NoSuchElementException e) {
+                if (attempts >= 3) throw e;
+            } catch (org.openqa.selenium.TimeoutException te) {
+                // element not clickable - re-wait for overlays and retry
+                waitForLoaderToDisappear();
+                waitForOverlaysToDisappear();
+                if (attempts >= 3) throw te;
             }
-        } catch (Exception ignored) {}
-        element.click();
+        }
+    }
+
+    /**
+     * Wait for OrangeHRM form loader/overlay to disappear if present.
+     */
+    private void waitForLoaderToDisappear() {
+        try {
+            By loader = By.cssSelector("div.oxd-form-loader");
+            WebDriverWait longWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+            longWait.until(ExpectedConditions.invisibilityOfElementLocated(loader));
+        } catch (Exception ignored) {
+            // ignore timeout or absence of loader
+        }
+    }
+
+    /**
+     * Wait for common overlays (modals, loading masks) to disappear to avoid click interception.
+     */
+    private void waitForOverlaysToDisappear() {
+        try {
+            By overlays = By.cssSelector(".oxd-overlay, .oxd-loading, .modal-backdrop, div[role='presentation']");
+            WebDriverWait longWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(8));
+            longWait.until(ExpectedConditions.invisibilityOfElementLocated(overlays));
+        } catch (Exception ignored) {
+            // ignore if overlays not present
+        }
     }
 
     /**
